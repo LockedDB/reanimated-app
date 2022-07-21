@@ -1,9 +1,14 @@
-import { StyleSheet, View} from "react-native";
+import {StyleSheet, View} from "react-native";
+import {Gesture} from "./Gesture";
+
 
 export const PanGestureScreen = () => {
-    return <View style={styles.container}>
 
-    </View>
+    return (
+        <View style={styles.container}>
+            <Gesture height={200} width={200}/>
+        </View>
+    )
 }
 
 const styles = StyleSheet.create({
@@ -12,9 +17,5 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    buttonsContainer: {
-        marginTop: 15,
-        flexDirection: 'row',
     }
 });
