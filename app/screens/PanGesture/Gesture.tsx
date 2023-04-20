@@ -1,4 +1,5 @@
 import Animated, {
+  SharedValue,
   useAnimatedGestureHandler,
   useAnimatedStyle,
   useSharedValue,
@@ -12,6 +13,8 @@ const Circle = ({ width, height, backgroundColor }: GestureProps) => (
 );
 
 interface GestureProps {
+  x?: number;
+  y?: number;
   width: number;
   height: number;
   backgroundColor?: string;
@@ -23,12 +26,14 @@ type GestureContext = {
 };
 
 export const Gesture = ({
+  x,
+  y,
   width,
   height,
   backgroundColor = "blue",
 }: GestureProps) => {
-  const translateX = useSharedValue(0);
-  const translateY = useSharedValue(0);
+  const translateX = useSharedValue(x || 0);
+  const translateY = useSharedValue(y || 0);
 
   const onGestureEvent = useAnimatedGestureHandler({
     onStart: (_, ctx: GestureContext) => {

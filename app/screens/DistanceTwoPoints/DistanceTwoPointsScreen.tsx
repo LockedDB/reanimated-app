@@ -1,13 +1,23 @@
 import React from "react";
-import { Gesture } from "../PanGesture/Gesture";
+import Bubble from "./components/Bubble";
+import { useSharedValue } from "react-native-reanimated";
+import Draggable from "./components/Draggable";
+import { Dimensions } from "react-native";
+
+const maxWidth = Dimensions.get("window").width;
+const random = () => Math.random() * maxWidth + 1;
 
 export const DistanceTwoPointsScreen = () => {
-  const PointA = <Gesture width={50} height={50} />;
-  const PointB = <Gesture width={50} height={50} backgroundColor="green" />;
+  const x1 = useSharedValue(random());
+  const y1 = useSharedValue(random());
+  const x2 = useSharedValue(random());
+  const y2 = useSharedValue(random());
+
   return (
     <React.Fragment>
-      {PointA}
-      {PointB}
+      <Bubble x1={x1} y1={y1} x2={x2} y2={y2} />
+      <Draggable x={x1} y={y1} />
+      <Draggable x={x2} y={y2} />
     </React.Fragment>
   );
 };
