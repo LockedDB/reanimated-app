@@ -1,9 +1,15 @@
 import { PanGestureHandler } from "react-native-gesture-handler";
 import Animated, {
+  measure,
+  runOnJS,
+  runOnUI,
   useAnimatedGestureHandler,
+  useAnimatedRef,
   useAnimatedStyle,
 } from "react-native-reanimated";
-import { StyleSheet } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
+import { useContext } from "react";
+import { BubbleAnimationContext } from "../context/BubbleAnimationProvider";
 
 type GestureContext = {
   offsetX: number;
@@ -16,6 +22,9 @@ interface DraggableProps {
 }
 
 const Draggable = ({ x, y }: DraggableProps) => {
+  const aref = useAnimatedRef<Animated.View>();
+  const { bubbleAnimation } = useContext(BubbleAnimationContext);
+
   const panGestureHandler = useAnimatedGestureHandler({
     onStart: (_, ctx: GestureContext) => {
       ctx.offsetX = x.value;
@@ -27,6 +36,19 @@ const Draggable = ({ x, y }: DraggableProps) => {
     },
   });
 
+  const onPress = () => {
+    runOnUI(() => {
+      "worklet";
+      const measured = measure(aref);
+      if (measured !== null) {
+        const { x, y } = measured;
+        runOnJS(bubbleAnimation)(x, y);
+      } else {
+        console.warn("measured is null");
+      }
+    })();
+  };
+
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{ translateX: x.value }, { translateY: y.value }],
@@ -35,7 +57,9 @@ const Draggable = ({ x, y }: DraggableProps) => {
 
   return (
     <PanGestureHandler onGestureEvent={panGestureHandler}>
-      <Animated.View style={[styles.draggable, animatedStyle]} />
+      <TouchableOpacity onPress={onPress}>
+        <Animated.View ref={aref} style={[styles.draggable, animatedStyle]} />
+      </TouchableOpacity>
     </PanGestureHandler>
   );
 };

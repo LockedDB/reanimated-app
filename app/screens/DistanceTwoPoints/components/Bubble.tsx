@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { StyleSheet } from "react-native";
 import Animated, {
   useSharedValue,
-  withSequence,
   withTiming,
   useAnimatedStyle,
   SharedValue,
@@ -19,13 +18,10 @@ const Bubble = ({ x1, y1, x2, y2 }: BubbleProps) => {
   const bubbleX = useSharedValue(x1.value);
   const bubbleY = useSharedValue(y1.value);
 
-  useEffect(() => {
-    const moveBubble = () => {
-      bubbleX.value = withTiming(x2.value, { duration: 1000 });
-      bubbleY.value = withTiming(y2.value, { duration: 1000 });
-    };
-    moveBubble();
-  }, [x1, y1, x2, y2]);
+  const moveBubble = () => {
+    bubbleX.value = withTiming(x2.value, { duration: 1000 });
+    bubbleY.value = withTiming(y2.value, { duration: 1000 });
+  };
 
   const animatedBubbleStyle = useAnimatedStyle(() => {
     return {
